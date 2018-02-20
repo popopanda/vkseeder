@@ -1,0 +1,11 @@
+Dog:
+  name: "Dog"
+  secrets:
+    - username: "Shiba"
+    - password: "inu"
+    - color: "yellow"
+Cat:
+  name: "Cat"
+  secrets:
+    - words: "meow"
+    - color: "black"
