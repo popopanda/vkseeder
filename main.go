@@ -4,48 +4,64 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"path/filepath"
+	"os"
 
+	"github.com/hashicorp/vault/api"
 	yaml "gopkg.in/yaml.v2"
 )
 
 type Secrets struct {
-	Dog struct {
-		Name    string `json:"name"`
-		Secrets []struct {
-			Username string `json:"username,omitempty"`
-			Password string `json:"password,omitempty"`
-			Color    string `json:"color,omitempty"`
-		} `json:"secrets"`
-	} `json:"Dog"`
-	Cat struct {
-		Name    string `json:"name"`
-		Secrets []struct {
-			Words string `json:"words,omitempty"`
-			Color string `json:"color,omitempty"`
-		} `json:"secrets"`
-	} `json:"Cat"`
+	Keys []struct {
+		Key    string                 `json:"key"`
+		Values map[string]interface{} `json:"values"`
+	} `json:"keys"`
 }
 
 func main() {
 
-	filename, err := filepath.Abs("./demo.yml")
+	AuthToken := os.Getenv("VAULT_TOKEN")
+	VaultADDR := os.Getenv("VAULT_ADDR")
+	YamlEntryFile := os.Getenv("YAML_ENTRY_FILE")
+
+	client := (vaultClient(AuthToken, VaultADDR))
+	clientLogical := client.Logical()
+	clientSys := client.Sys()
+	resultKeys := parseYAML(YamlEntryFile)
+
+	for _, data := range resultKeys.Keys {
+		clientSys.Mount(data.Key, &api.MountInput{
+			Type:        "kv",
+			Description: fmt.Sprintf("%v mount path", data.Key),
+		})
+		_, err := clientLogical.Write(data.Key, data.Values)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Printf("%v was written to vault successfully\n", data.Key)
+	}
+}
+
+func vaultClient(vaultToken, host string) *api.Client {
+	client, err := api.NewClient(&api.Config{
+		Address: host,
+	})
+
 	if err != nil {
 		log.Fatal(err)
 	}
-	yamlFile, err := ioutil.ReadFile(filename)
 
+	client.SetToken(vaultToken)
+	return client
+}
+
+func parseYAML(filename string) Secrets {
+	var secret Secrets
+	reader, err := os.Open(filename)
 	if err != nil {
 		log.Fatal(err)
 	}
+	buf, _ := ioutil.ReadAll(reader)
+	yaml.Unmarshal(buf, &secret)
 
-	var secrets Secrets
-
-	err = yaml.Unmarshal(yamlFile, &secrets)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Printf("Value: %#v\n", secrets.Dog.Secrets["Shiba"])
-
+	return secret
 }
