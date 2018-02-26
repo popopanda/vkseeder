@@ -11,7 +11,7 @@ The following Environment Variables need to be set:
 - VAULT_ADDR: Address of the Vault host
 - YAML_ENTRY_FILE: Path of the yml file
 
-Your Vault token would require the following policy:
+Your Vault token would require specified policies, for example:
 
 ```
 path "secret/*" {
