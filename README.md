@@ -1,5 +1,7 @@
 [![CircleCI](https://circleci.com/gh/popopanda/vkseeder/tree/master.svg?style=svg)](https://circleci.com/gh/popopanda/vkseeder/tree/master)
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/popopanda/vkseeder)](https://goreportcard.com/report/github.com/popopanda/vkseeder)
+
 # Reads values from a yml file and imports it to Vault
 
 # Prerequisites
