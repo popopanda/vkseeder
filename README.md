@@ -24,38 +24,40 @@ path "secret/*" {
 
 ```
 keys:
-    - key: secret/shiba
+    - key: secret/foo
       values:
-        username: shiba inu
-        password: muchwow
-    - key: secret/spaceship
+        value: bar
+    - key: foo/secret
       values:
-        destination: mars
-    - key: secret/car
+        value: bar
+    - key: baz
       values:
-        color: Red
-    - key: secret/moon
-      values:
-        Distance: 238900 miles
+        value: foobar
 ```
 
 This would result in adding the keys in the yaml file as k/v in vault. Thus reading from vault using the keys `secret/shiba` and `secret/moon` would get:
 
 ```
-vault read secret/shiba
+vault read secret/foo
 
 Key                 Value
 ---                 -----
 refresh_interval    768h
-password            muchwow
-username            shiba inu
+value               bar
 
-vault read secret/moon
+vault read foo/secret
 
 Key                 Value
 ---                 -----
 refresh_interval    768h
-Distance            238900 miles
+value               bar
+
+vault read baz
+
+Key                 Value
+---                 -----
+refresh_interval    768h
+value               foobar
 ```
 
 # Docker run
@@ -68,3 +70,6 @@ ENV VAULT_TOKEN ""
 ENV VAULT_ADDR "http://127.0.0.1:8200"
 ENV YAML_ENTRY_FILE "/tmp/example.yml"
 ```
+
+#Limitations
+- Entries removed from the yaml file are not deleted in vault

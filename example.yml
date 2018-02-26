@@ -1,19 +1,10 @@
 keys:
-    - key: secret/shiba
+    - key: secret/foo
       values:
-        username: shiba inu
-    - key: secret/spaceship
+        value: bar
+    - key: foo/secret
       values:
-        destination: mars
-    - key: secret/car
+        value: bar
+    - key: baz
       values:
-        color: Red
-    - key: secret/moon
-      values:
-        Distance: 238900 miles
-    - key: secret/whales
-      values:
-        color: grey
-    - key: bitcoin/secret
-      values:
-        value: 9000
+        value: foobar

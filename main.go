@@ -36,6 +36,7 @@ func main() {
 		})
 		_, err := clientLogical.Write(data.Key, data.Values)
 		if err != nil {
+			fmt.Printf("%v failed to be written\n", data.Key)
 			log.Fatal(err)
 		}
 		fmt.Printf("%v was written to vault successfully\n", data.Key)
