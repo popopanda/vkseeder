@@ -10,6 +10,7 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
+// Secrets to match YAML file
 type Secrets struct {
 	Keys []struct {
 		Key    string                 `json:"key"`
