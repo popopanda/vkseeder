@@ -28,7 +28,6 @@ func main() {
 	clientLogical := client.Logical()
 	clientSys := client.Sys()
 	resultKeys := parseYAML(YamlEntryFile)
-	defer
 
 	for _, data := range resultKeys.Keys {
 		clientSys.Mount(data.Key, &api.MountInput{
