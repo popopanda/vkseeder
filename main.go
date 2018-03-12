@@ -28,6 +28,7 @@ func main() {
 	clientLogical := client.Logical()
 	clientSys := client.Sys()
 	resultKeys := parseYAML(YamlEntryFile)
+	defer
 
 	for _, data := range resultKeys.Keys {
 		clientSys.Mount(data.Key, &api.MountInput{
@@ -62,6 +63,9 @@ func parseYAML(filename string) Secrets {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	defer reader.Close()
+	
 	buf, _ := ioutil.ReadAll(reader)
 	yaml.Unmarshal(buf, &secret)
 
